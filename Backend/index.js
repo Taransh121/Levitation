@@ -9,6 +9,7 @@ const PORT = 8080;
 const authRoutes = require("./Routes/AuthRoute")
 const productRoutes = require("./Routes/ProductRoute")
 const invoiceRoutes = require("./Routes/invoiceRoute")
+const path = require("path");
 
 
 //Configurations
@@ -17,12 +18,7 @@ app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-
-//Routes
-app.use("/user", authRoutes);
-app.use("/product", productRoutes);
-app.use("/invoice", invoiceRoutes);
+const __dirname = path.resolve();
 
 
 //Database
@@ -36,6 +32,16 @@ mongoose.connect(mongoURL)
         console.log(error);
     });
 
+//Routes
+app.use("/user", authRoutes);
+app.use("/product", productRoutes);
+app.use("/invoice", invoiceRoutes);
+
+
+app.use(express.static(path.join(__dirname, '/client/dist')));
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
+})
 
 app.listen(PORT, () => {
     console.log(`Server running at PORT - ${PORT}`);
