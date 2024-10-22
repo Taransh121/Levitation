@@ -44,7 +44,7 @@ export const Product: React.FC = () => {
             setPrice('');
             setQty('');
             setError(null);  // Clear any error message
-        } catch (err: unknown) {
+        } catch (err) {
             if (err instanceof Error) {
                 setError(err.message);
             } else {
@@ -156,6 +156,7 @@ export const Product: React.FC = () => {
                             Click here to Generate PDF Invoice
                         </button>
                     </div>
+                    {error && <div className="error">{error}</div>}
                 </div>
             </div>
         </>
