@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-const __dirname = path.resolve();
+const dirname = path.resolve();
 
 
 //Database
@@ -38,9 +38,9 @@ app.use("/product", productRoutes);
 app.use("/invoice", invoiceRoutes);
 
 
-app.use(express.static(path.join(__dirname, '/client/dist')));
+app.use(express.static(path.join(dirname, '/client/dist')));
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
+    res.sendFile(path.join(dirname, 'client', 'dist', 'index.html'));
 })
 
 app.listen(PORT, () => {

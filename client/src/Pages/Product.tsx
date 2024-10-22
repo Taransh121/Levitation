@@ -44,8 +44,12 @@ export const Product: React.FC = () => {
             setPrice('');
             setQty('');
             setError(null);  // Clear any error message
-        } catch (err) {
-            setError(err.message);
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("An unknown error occurred.");
+            }
         }
     };
 

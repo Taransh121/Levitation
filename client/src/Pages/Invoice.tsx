@@ -2,14 +2,19 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { Navbar } from './Navbar';
 
-
+interface Product {
+    _id: string;
+    name: string;
+    qty: number;
+    price: number;
+}
 export const Invoice: React.FC = () => {
     const location = useLocation();
     const productsInState = location.state?.products || []; // Get products from state
     console.log(productsInState);
     
 
-    const products = productsInState.map((product: any) => ({
+    const products = productsInState.map((product: Product) => ({
         productId: product._id,
         name: product.name || 'Unknown Product',
         quantity: product.qty,
@@ -19,11 +24,12 @@ export const Invoice: React.FC = () => {
 
     // Function to calculate total charges, GST, and total amount
     const calculateTotals = () => {
-        const totalCharges = products.reduce((acc, curr) => acc + parseFloat(curr.totalAmount), 0);
+        const totalCharges = products.reduce((acc: number, curr: { totalAmount: string }) => acc + parseFloat(curr.totalAmount), 0);
         const gst = (totalCharges * 0.18).toFixed(2);
         const totalAmount = (totalCharges + parseFloat(gst)).toFixed(2);
         return { totalCharges: totalCharges.toFixed(2), gst, totalAmount };
     };
+    
 
     const { totalCharges, gst, totalAmount } = calculateTotals();
 
@@ -89,15 +95,16 @@ export const Invoice: React.FC = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {products.map((product, index) => (
-                            <tr key={index} className="border-t">
-                                <td className="p-3">{product.name}</td>
-                                <td className="p-3">{product.quantity}</td>
-                                <td className="p-3">USD {product.rate}</td>
-                                <td className="p-3">USD {product.totalAmount}</td>
-                            </tr>
-                        ))}
-                    </tbody>
+    {products.map((product: { name: string; quantity: number; rate: number; totalAmount: string }, index: number) => (
+        <tr key={index} className="border-t">
+            <td className="p-3">{product.name}</td>
+            <td className="p-3">{product.quantity}</td>
+            <td className="p-3">USD {product.rate}</td>
+            <td className="p-3">USD {product.totalAmount}</td>
+        </tr>
+    ))}
+</tbody>
+
                 </table>
 
                 <div className="flex justify-end mt-6 ">
